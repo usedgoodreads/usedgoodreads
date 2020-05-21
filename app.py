@@ -44,5 +44,4 @@ def to_booklooker(goodreads_id, garbage):
     """Redirect to booklooker search.
     """
     book = GRC.book(goodreads_id)
-    booklooker_search_url = "https://www.booklooker.de/B%C3%BCcher/Angebote/isbn={}".format(book.isbn13)
-    return redirect(booklooker_search_url)
+    return redirect(get_booklooker_search_url(book))
