@@ -47,11 +47,11 @@ These are the actual sellers of the books. They can be individuals or cooperatio
 ## Datamodel
 There are three objects which need to be modeled:
 
-- Book <br> 
+- Book <br>
 A single book. Ideally coherent with the model used by GR.
-- AggregateShop <br> 
+- AggregateShop <br>
 An entity selling books online with individuals or companies in the backend.
-- IndividualShop <br> 
+- IndividualShop <br>
 Actual individual selling the product. This can be the AggregateShop itself or another seller.
 
 ## API
@@ -62,3 +62,4 @@ The API used can be different from the one used by GR.
 - [\#REST API](20200511150216-rest_api.org)
 - [GoodReads API Documentation](https://www.goodreads.com/api)
 - [Possible role model :P](https://www.nsfwyoutube.com)
+- [GoodReads PyPi package - Book properties](https://github.com/sefakilic/goodreads/blob/master/goodreads/book.py)
