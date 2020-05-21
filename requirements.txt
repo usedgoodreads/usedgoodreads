@@ -1,0 +1,2 @@
+goodreads==0.3.2
+python-dotenv==0.13.0
