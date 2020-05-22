@@ -9,6 +9,7 @@ python = "^3.8"
 rq = "^1.4.1"
 flask-sqlalchemy = "^2.4.1"
 psycopg2 = "^2.8.5"
+selenium = "^3.141.0"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.8.1"
