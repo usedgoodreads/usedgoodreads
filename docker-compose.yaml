@@ -18,7 +18,7 @@ services:
     image: usedgoodreads/backend
     build: backend
     init: true
-    command: bash -c "wait-for-it -s -t 60 -h postgres -p 5432 && wait-for-it -s -t 60 -h redis -p 6379 -- sleep 10"
+    command: bash -c "wait-for-it -s -t 60 postgres:5432 && wait-for-it -s -t 60 redis:6379 -- sleep 10"
     ports:
       - "5000:5000"
     env_file:
@@ -32,7 +32,7 @@ services:
     image: usedgoodreads/backend
     build: backend
     init: true
-    command: bash -c "wait-for-it -s -t 60 -h redis -p 6379 -- rq worker --url redis://redis:6379"
+    command: bash -c "wait-for-it -s -t 60 postgres:5432 && wait-for-it -s -t 60 redis:6379 -- rq worker --url redis://redis:6379"
     env_file:
       - ./env/.backend.env
     volumes:
@@ -44,7 +44,7 @@ services:
     image: usedgoodreads/frontend
     build: frontend
     init: true
-    command: bash -c "wait-for-it -s -t 60 -h backend -p 5000 -- sleep 10"
+    command: bash -c "wait-for-it -s -t 60 backend:5000 -- sleep 10"
     ports:
       - "3000:3000"
     env_file:
