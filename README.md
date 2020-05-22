@@ -37,7 +37,7 @@ Build all docker images
 
 Startup infrastructure in daemon mode
 
-    docker-compoes up -d
+    docker-compose up -d
 
 Scale out async worker with the remaining infrastructure being up already
 
