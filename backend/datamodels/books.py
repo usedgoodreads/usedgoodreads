@@ -113,7 +113,6 @@ class Book:
         check = self._compute_isbn10_checksum(chars)
         return "{}-{}-{}-{}".format(chars[0],"".join(chars[1:4]), "".join(chars[4:9]), check)
 
-
 @dataclass
 class BookOffer:
     title: str
