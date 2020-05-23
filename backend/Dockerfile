@@ -22,4 +22,4 @@ RUN poetry install --no-interaction --no-root --ansi
 COPY --chown=python:python . .
 RUN poetry install --no-interaction --ansi
 
-CMD ["sleep", "60"]
+CMD ["usedgoodreads"]
