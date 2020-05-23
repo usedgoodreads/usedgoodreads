@@ -13,7 +13,7 @@ def main():
     ]
     for k in testing:
         try:
-            b = Book(k)
+            b = Book(title = "Fancy title", ean = k)
             print(b, b.isbn13, b.ean, b.isbn10)
         except:
             print(k, " not valid")
@@ -27,8 +27,8 @@ class Book:
     more. Further, the ISBN13 and ISBN10 identifiers can be calculated from the
     EAN.
     """
+    title: str
     ean: int
-    title: str = None
 
     @property
     def ean(self):
