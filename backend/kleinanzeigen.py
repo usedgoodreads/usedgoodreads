@@ -13,22 +13,21 @@ options = Options()
 options.add_argument("--headless")
 
 driver = webdriver.Firefox(options=options)
+wait = WebDriverWait(driver, 10)
 
 driver.get("https://www.ebay-kleinanzeigen.de/s-buecher-zeitschriften/c76")  # books
 
-gdpr = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "gdpr-banner-accept")))
+gdpr = wait.until(EC.element_to_be_clickable((By.ID, "gdpr-banner-accept")))
 gdpr.click()
 
-search = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "site-search-query")))
+search = wait.until(EC.presence_of_element_located((By.ID, "site-search-query")))
 search.send_keys("Harry Potter")
 search.send_keys(Keys.RETURN)
 
-time.sleep(5)
+time.sleep(2)
 
-results = driver.find_elements_by_id("srchrslt-adtable")
-assert len(results) == 1
-result = results[0]
-assert result.tag_name == "ul"
+result = wait.until(EC.presence_of_element_located((By.ID, "srchrslt-adtable")))
+driver.find_element_by_tag_name("html").send_keys(Keys.END)
 
 for item in result.find_elements_by_class_name("lazyload-item"):
     main = item.find_element_by_class_name("aditem-main")
