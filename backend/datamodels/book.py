@@ -18,7 +18,7 @@ def main():
         except:
             print(k, " not valid")
 
-@dataclass(init=False)
+@dataclass
 class Book:
     """ Book dataclass with EAN (European Article Number) and title of the book.
 
@@ -30,17 +30,19 @@ class Book:
     ean: int
     title: str = None
 
-    def __init__(self, value, title=None):
-        self._validate_isbn(str(value))
-        self.title = title
+    @property
+    def ean(self):
+        return self._ean
 
-    def _validate_isbn(self, value):
+    @ean.setter
+    def ean(self, value):
         """Check if string is a valid isbn expression
 
         Source
         ====
         https://www.oreilly.com/library/view/regular-expressions-cookbook/9781449327453/ch04s13.html
         """
+        value = str(value)
         # Checks for ISBN-10 or ISBN-13 format
         regex = re.compile("^(?:ISBN(?:-1[03])?:? )?(?=[0-9X]{10}$|(?=(?:[0-9]+[- ]){3})[- 0-9X]{13}$|97[89][0-9]{10}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)(?:97[89][- ]?)?[0-9]{1,5}[- ]?[0-9]+[- ]?[0-9]+[- ]?[0-9X]$")
         is_isbn13 = False
@@ -64,12 +66,12 @@ class Book:
                 # valid ISBN number
                 if is_isbn13:
                     chars += [str(check)]
-                    self.ean = int("".join(chars))
+                    self._ean = int("".join(chars))
                 else:
                     chars = ["9","7","8"] + chars
                     check = self._compute_isbn13_checksum(chars)
                     chars += [str(check)]
-                    self.ean = int("".join(chars))
+                    self._ean = int("".join(chars))
             else:
                 raise ValueError("Invalid check number for ISBN")  # Invalid check number
         else:
