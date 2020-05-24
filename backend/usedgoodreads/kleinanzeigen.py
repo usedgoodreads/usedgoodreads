@@ -8,11 +8,20 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.firefox.options import Options
+import os
 
 options = Options()
-options.add_argument("--headless")
+options.headless = True
+options.set_capability("javascriptEnabled", True)
 
-driver = webdriver.Firefox(options=options)
+SELENIUM_HOST = os.getenv('SELENIUM_HOST')
+SELENIUM_PORT = os.getenv('SELENIUM_PORT')
+
+driver = webdriver.Remote(
+    command_executor='http://{}:{}/wd/hub'.format(SELENIUM_HOST, SELENIUM_PORT),
+    desired_capabilities=options.to_capabilities())
+
+
 wait = WebDriverWait(driver, 10)
 
 driver.get("https://www.ebay-kleinanzeigen.de/s-buecher-zeitschriften/c76")  # books

@@ -2,6 +2,7 @@ import time
 import random
 
 from selenium import webdriver
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
@@ -9,11 +10,23 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.firefox.options import Options
 from dataclasses import dataclass
 from books import Book, BookOffer
+import os
 
 def main():
+    SELENIUM_HOST = os.getenv('SELENIUM_HOST')
+    SELENIUM_PORT = os.getenv('SELENIUM_PORT')
+
     options = Options()
-    options.add_argument("--headless")
-    driver = webdriver.Firefox(options=options)
+    options.headless = True
+    options.set_capability("javascriptEnabled", True)
+
+    SELENIUM_HOST = os.getenv('SELENIUM_HOST')
+    SELENIUM_PORT = os.getenv('SELENIUM_PORT')
+
+    driver = webdriver.Remote(
+    command_executor='http://{}:{}/wd/hub'.format(SELENIUM_HOST, SELENIUM_PORT),
+    desired_capabilities=options.to_capabilities())
+
 
     book = Book(title = "Herr der Ringe", ean = "978-3-86680-192-9")
     offers = EbayKleinanzeigen(book).get_offers(driver)

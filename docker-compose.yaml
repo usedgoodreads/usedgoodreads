@@ -28,6 +28,15 @@ services:
     depends_on:
       - postgres
       - redis
+  firefox:
+    image: selenium/standalone-firefox:3.141.59-20200515
+    volumes:
+      - ./backend:/home/python/app
+      - /dev/shm:/dev/shm
+    depends_on:
+      - postgres
+      - redis
+      - worker
   worker:
     image: usedgoodreads/backend
     build: backend
