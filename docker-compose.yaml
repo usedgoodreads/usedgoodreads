@@ -3,15 +3,11 @@ services:
   postgres:
     image: postgres:12
     init: true
-    ports:
-      - "5432:5432"
     env_file:
       - ./env/.postgres.env
   redis:
     image: redis:5
     init: true
-    ports:
-      - "6379:6379"
     env_file:
       - ./env/.redis.env
   backend:
@@ -28,15 +24,10 @@ services:
     depends_on:
       - postgres
       - redis
+      - firefox
   firefox:
     image: selenium/standalone-firefox:3.141.59-20200515
-    volumes:
-      - ./backend:/home/python/app
-      - /dev/shm:/dev/shm
-    depends_on:
-      - postgres
-      - redis
-      - worker
+    ipc: host
   worker:
     image: usedgoodreads/backend
     build: backend
@@ -49,6 +40,7 @@ services:
     depends_on:
       - postgres
       - redis
+      - firefox
   frontend:
     image: usedgoodreads/frontend
     build: frontend

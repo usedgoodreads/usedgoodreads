@@ -13,18 +13,18 @@ from books import Book, BookOffer
 import os
 
 def main():
-    SELENIUM_HOST = os.getenv('SELENIUM_HOST')
-    SELENIUM_PORT = os.getenv('SELENIUM_PORT')
+    SELENIUM_HOST = os.getenv("SELENIUM_HOST")
+    SELENIUM_PORT = os.getenv("SELENIUM_PORT")
 
     options = Options()
     options.headless = True
     options.set_capability("javascriptEnabled", True)
 
-    SELENIUM_HOST = os.getenv('SELENIUM_HOST')
-    SELENIUM_PORT = os.getenv('SELENIUM_PORT')
+    SELENIUM_HOST = os.getenv("SELENIUM_HOST")
+    SELENIUM_PORT = os.getenv("SELENIUM_PORT")
 
     driver = webdriver.Remote(
-    command_executor='http://{}:{}/wd/hub'.format(SELENIUM_HOST, SELENIUM_PORT),
+    command_executor="http://{}:{}/wd/hub".format(SELENIUM_HOST, SELENIUM_PORT),
     desired_capabilities=options.to_capabilities())
 
 
@@ -112,5 +112,5 @@ class Booklooker:
     def get_offers(self, driver):
         raise NotImplementedError
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -14,11 +14,11 @@ options = Options()
 options.headless = True
 options.set_capability("javascriptEnabled", True)
 
-SELENIUM_HOST = os.getenv('SELENIUM_HOST')
-SELENIUM_PORT = os.getenv('SELENIUM_PORT')
+SELENIUM_HOST = os.getenv("SELENIUM_HOST")
+SELENIUM_PORT = os.getenv("SELENIUM_PORT")
 
 driver = webdriver.Remote(
-    command_executor='http://{}:{}/wd/hub'.format(SELENIUM_HOST, SELENIUM_PORT),
+    command_executor=f"http://{SELENIUM_HOST}:{SELENIUM_PORT}/wd/hub",
     desired_capabilities=options.to_capabilities())
 
 
