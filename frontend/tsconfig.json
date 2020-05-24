@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "jsxFactory": "h",
+    "target": "es6",
+    "module": "commonjs",
+    "lib": [
+      "es2018",
+      "es6",
+      "dom",
+      "dom.iterable"
+    ],
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "rootDirs": [
+      "usedgoodreads"
+    ],
+    "outDir": "dist",
+    "strict": true,
+    "sourceMap": true,
+    "moduleResolution": "node"
+  },
+  "include": [
+    "usedgoodreads/**/*"
+  ],
+  "exclude": [
+    ".git/**",
+    "node_modules"
+  ]
+}

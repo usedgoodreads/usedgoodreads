@@ -45,7 +45,7 @@ services:
     image: usedgoodreads/frontend
     build: frontend
     init: true
-    command: bash -c "wait-for-it -s -t 60 backend:5000 -- sleep 10"
+    command: bash -c "wait-for-it -s -t 60 backend:5000 -- npm start"
     ports:
       - "3000:3000"
     env_file:

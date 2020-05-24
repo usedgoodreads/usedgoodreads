@@ -1,0 +1,23 @@
+{
+  "name": "usedgoodreads",
+  "version": "0.1.0",
+  "description": "Finding used good reads",
+  "scripts": {
+    "check": "tsc --noEmit",
+    "build": "parcel build usedgoodreads/index.html",
+    "start": "parcel serve --host 0.0.0.0 --port 3000 usedgoodreads/index.html"
+  },
+  "author": "UsedGoodreads <hello@usedgoodreads.com>",
+  "license": "MIT",
+  "dependencies": {
+    "preact": "^10.4.4",
+    "preact-router": "^3.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.5",
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "parcel-bundler": "^1.12.4",
+    "typescript": "^3.9.3"
+  }
+}
