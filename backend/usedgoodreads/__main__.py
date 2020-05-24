@@ -21,12 +21,15 @@ class KeyToIsbn(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
     key = db.Column(db.String(), nullable=False, index=True)
+
+    title = db.Column(db.String(), nullable=False)
     isbn = db.Column(db.String(), nullable=False)
 
     at = db.Column(db.DateTime(), default=datetime.utcnow)
 
-    def __init__(self, key, isbn):
+    def __init__(self, key, title, isbn):
         self.key = key
+        self.title = title
         self.isbn = isbn
 
     @staticmethod
@@ -37,11 +40,6 @@ class KeyToIsbn(db.Model):
                 .filter(KeyToIsbn.key == key) \
                 .filter(KeyToIsbn.at >= valid) \
                 .first()
-
-
-def key_to_isbn(key):
-    v = KeyToIsbn.get(key=key)
-    return v.isbn if v else None
 
 
 def key_to_job_id(key):
@@ -81,7 +79,7 @@ class UsedBook(db.Model):
 def resolve_isbn(key):
     time.sleep(3)
 
-    item = KeyToIsbn(key=key, isbn="9780393608328")
+    item = KeyToIsbn(key=key, title="Harry Potter, Book 2", isbn="9780393608328")
 
     db.session.add(item)
     db.session.commit()
@@ -90,12 +88,12 @@ def resolve_isbn(key):
 def resolve_used_books(key):
     time.sleep(3)
 
-    isbn = key_to_isbn(key)
+    cache = KeyToIsbn.get(key=key)
 
-    if not isbn:
+    if not cache:
         return
 
-    item = UsedBook(isbn=isbn, title="Harry Potter",
+    item = UsedBook(isbn=cache.isbn, title="Harry Potter 2",
             description="Book in good shape", price=5,
             link="http://example.com")
 
@@ -106,13 +104,16 @@ def resolve_used_books(key):
 # https://www.usedgoodreads.com/book/show/36236132-growing-a-revolution
 @app.route("/book/show/<string:key>")
 def book_show(key):
-    isbn = key_to_isbn(key)
+    cache = KeyToIsbn.get(key=key)
 
-    if isbn:
-        books = UsedBook.get(isbn)
+    if cache:
+        books = UsedBook.get(isbn=cache.isbn)
 
         if books:
-            return jsonify([ { "isbn": v.isbn, "title": v.title } for v in books]), 200
+            results = [ { "title": v.title, "description": v.description } for v in books ]
+
+            return jsonify({ "title": cache.title, "isbn": cache.isbn,
+                             "results": results }), 200
 
     isbn_jid = key_to_job_id(f"resolve_isbn:{key}")
     isbn_job = q.fetch_job(isbn_jid)
