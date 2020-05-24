@@ -1,16 +1,11 @@
-import time
-import hashlib
-
-from flask import jsonify
-
 from .base import app, db, q
+from flask import jsonify
+import time
+
 from .models.book import Book
 from .models.usedbook import UsedBook
+from .models.ticket import Ticket
 
-def key_to_job_id(key):
-    h = hashlib.blake2s()
-    h.update(key.encode("utf-8"))
-    return h.hexdigest()
 
 def resolve_isbn(key):
     time.sleep(3)
@@ -30,8 +25,8 @@ def resolve_used_books(key):
         return
 
     item = UsedBook(isbn=cache.isbn, title="Harry Potter 2",
-            description="Book in good shape", price=5,
-            link="http://example.com")
+                    description="Book in good shape", price=5,
+                    link="http://example.com")
 
     db.session.add(item)
     db.session.commit()
@@ -51,23 +46,19 @@ def book_show(key):
             return jsonify({ "title": cache.title, "isbn": cache.isbn,
                              "results": results }), 200
 
-    isbn_jid = key_to_job_id(f"resolve_isbn:{key}")
-    isbn_job = q.fetch_job(isbn_jid)
+    ticket = Ticket(key)
 
-    if isbn_job:
+    if q.fetch_job(ticket.isbn_jid):
         return jsonify({ "status": "pending" }), 404
 
-    used_books_jid = key_to_job_id(f"resolve_used_books:{key}")
-    used_books_job = q.fetch_job(used_books_jid)
-
-    if used_books_job:
+    if q.fetch_job(ticket.used_books_jid):
         return jsonify({ "status": "pending" }), 404
 
     q.enqueue(resolve_isbn, key, job_timeout=60 * 1,
-            ttl=60 * 60, job_id=isbn_jid)
+            ttl=60 * 60, job_id=ticket.isbn_jid)
 
     q.enqueue(resolve_used_books, key, job_timeout=60 * 1,
-            ttl=60 * 60, job_id=used_books_jid, depends_on=isbn_jid)
+            ttl=60 * 60, job_id=ticket.used_books_jid, depends_on=ticket.isbn_jid)
 
     return jsonify({ "status": "enqueued" }), 404
 

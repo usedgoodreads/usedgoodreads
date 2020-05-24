@@ -1,6 +1,6 @@
-import hashlib
 from datetime import datetime, timedelta
 from ..base import db
+
 
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -19,11 +19,6 @@ class Book(db.Model):
         valid = datetime.utcnow() - ttl
 
         return Book.query \
-                .filter(Book.goodreads_key == key) \
-                .filter(Book.at >= valid) \
-                .first()
-
-    def __hash__(self):
-        h = hashlib.blake2s()
-        h.update(self.goodreads_key.encode("utf-8"))
-        return h.hexdigest()
+                   .filter(Book.goodreads_key == key) \
+                   .filter(Book.at >= valid) \
+                   .first()
