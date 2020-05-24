@@ -1,21 +1,7 @@
-import os
 import time
 import hashlib
-from datetime import datetime, timedelta
 
-from flask import Flask, jsonify
-from flask_sqlalchemy import SQLAlchemy
-
-from redis import Redis
-from rq import Queue
-
-app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("SQLALCHEMY_DATABASE_URI")
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-db = SQLAlchemy(app)
-q = Queue(connection=Redis(host=os.getenv("REDIS_HOST"),
-                           port=os.getenv("REDIS_PORT")))
-
+from flask import jsonify
 
 class KeyToIsbn(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -40,7 +26,9 @@ class KeyToIsbn(db.Model):
                 .filter(KeyToIsbn.key == key) \
                 .filter(KeyToIsbn.at >= valid) \
                 .first()
-
+from .base import app, db, q
+from .models.book import Book
+from .models.usedbook import UsedBook
 
 def key_to_job_id(key):
     h = hashlib.blake2s()
