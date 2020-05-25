@@ -24,7 +24,7 @@ services:
     depends_on:
       - postgres
       - redis
-      - firefox
+      - worker
   firefox:
     image: selenium/standalone-firefox:3.141.59-20200515
     ipc: host
