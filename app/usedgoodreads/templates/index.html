@@ -15,7 +15,12 @@
   {% endif %}
   <ul>
   {% for result in results %}
-    <li>📘 {{result.title}} - {{result.description}}</li>
+    <li>📘 {{result.title}} </li>
+    <ul>
+      <li> {{result.description}} </li>
+      <li> {{result.link}} </li>
+      <li> {{result.price}} Euro </li>
+    </ul>
   {% endfor %}
   </ul>
   </body>
