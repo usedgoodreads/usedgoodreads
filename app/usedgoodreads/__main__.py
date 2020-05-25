@@ -1,5 +1,5 @@
 from .base import app, db, q
-from flask import jsonify
+from flask import jsonify, render_template
 import time
 
 from .models.book import Book
@@ -34,7 +34,7 @@ def resolve_used_books(key):
 
 # https://www.usedgoodreads.com/book/show/36236132-growing-a-revolution
 @app.route("/book/show/<string:key>")
-def book_show(key):
+def index(key):
     cache = Book.get(key=key)
 
     if cache:
@@ -43,16 +43,16 @@ def book_show(key):
         if books:
             results = [ { "title": v.title, "description": v.description } for v in books ]
 
-            return jsonify({ "title": cache.title, "isbn": cache.isbn,
-                             "results": results }), 200
+            return render_template("index.html", isbn=cache.isbn, title=cache.title,
+                    results=results)
 
     ticket = Ticket(key)
 
     if q.fetch_job(ticket.isbn_jid):
-        return jsonify({ "status": "pending" }), 404
+        return render_template("index.html")
 
     if q.fetch_job(ticket.used_books_jid):
-        return jsonify({ "status": "pending" }), 404
+        return render_template("index.html")
 
     q.enqueue(resolve_isbn, key, job_timeout=60 * 1,
             ttl=60 * 60, job_id=ticket.isbn_jid)
@@ -60,7 +60,7 @@ def book_show(key):
     q.enqueue(resolve_used_books, key, job_timeout=60 * 1,
             ttl=60 * 60, job_id=ticket.used_books_jid, depends_on=ticket.isbn_jid)
 
-    return jsonify({ "status": "enqueued" }), 404
+    return render_template("index.html")
 
 
 def main():

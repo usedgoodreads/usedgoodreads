@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <title>Used Good Reads</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <style>
+      body { margin: 0; padding: 0; }
+    </style>
+  </head>
+  <body>
+  {% if isbn and title %}
+    <h2>🔖 {{ title }} - {{ isbn }}</h2>
+  {% else %}
+    <h1>📥 Pending..</h1>
+  {% endif %}
+  <ul>
+  {% for result in results %}
+    <li>📘 {{result.title}} - {{result.description}}</li>
+  {% endfor %}
+  </ul>
+  </body>
+</html>
+
