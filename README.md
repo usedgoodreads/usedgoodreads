@@ -13,6 +13,18 @@ Goodreads is amazing for exploring new books.
 At the same time we want to promote second hand books, used books, and local book stores.
 This project's goal is to allow searching for `goodreads.com` books by adding `used` at the front of the link as in `usedgoodreads.com`.
 
+## Quickstart
+
+With [Docker](https://docs.docker.com/engine/) and [Docker Compose](https://docs.docker.com/compose/) start the infrastructure
+
+    docker-compose up
+
+Then in your browser
+
+    https://www.goodreads.com/book/show/36236132-growing-a-revolution
+
+    http://localhost:5000/book/show/36236132-growing-a-revolution
+
 
 ## Development
 
