@@ -2,7 +2,6 @@ import hashlib
 
 
 class Ticket:
-
     def __init__(self, key):
         self.goodreads_key = key
 

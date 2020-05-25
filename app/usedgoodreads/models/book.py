@@ -1,12 +1,14 @@
 from datetime import datetime, timedelta
-from ..base import db
+from usedgoodreads.base import db
 
 
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+
     goodreads_key = db.Column(db.String(), nullable=False, index=True)
     title = db.Column(db.String(), nullable=False)
     isbn = db.Column(db.String(), nullable=False)
+
     at = db.Column(db.DateTime(), default=datetime.utcnow)
 
     def __init__(self, key, title, isbn):

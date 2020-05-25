@@ -1,13 +1,16 @@
 from datetime import datetime, timedelta
-from ..base import db
+from usedgoodreads.base import db
+
 
 class UsedBook(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+
     isbn = db.Column(db.String(), nullable=False, index=True)
     title = db.Column(db.String(), nullable=False)
     description = db.Column(db.String(), nullable=False)
     price = db.Column(db.Integer, nullable=False)
     link = db.Column(db.String(), nullable=False)
+
     at = db.Column(db.DateTime(), default=datetime.utcnow)
 
     def __init__(self, isbn, title, description, price, link):
@@ -22,9 +25,9 @@ class UsedBook(db.Model):
         valid = datetime.utcnow() - ttl
 
         return UsedBook.query \
-                .filter(UsedBook.isbn == isbn) \
-                .filter(UsedBook.at >= valid) \
-                .all()
+                       .filter(UsedBook.isbn == isbn) \
+                       .filter(UsedBook.at >= valid) \
+                       .all()
 
     def __hash__(self):
         return NotImplementedError()

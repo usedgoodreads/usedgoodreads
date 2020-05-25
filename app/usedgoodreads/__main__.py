@@ -1,35 +1,10 @@
-from .base import app, db, q
-from flask import jsonify, render_template
-import time
+from flask import render_template
 
-from .models.book import Book
-from .models.usedbook import UsedBook
-from .models.ticket import Ticket
-
-
-def resolve_isbn(key):
-    time.sleep(3)
-
-    item = Book(key=key, title="Harry Potter, Book 2", isbn="9780393608328")
-
-    db.session.add(item)
-    db.session.commit()
-
-
-def resolve_used_books(key):
-    time.sleep(3)
-
-    cache = Book.get(key=key)
-
-    if not cache:
-        return
-
-    item = UsedBook(isbn=cache.isbn, title="Harry Potter 2",
-                    description="Book in good shape", price=5,
-                    link="http://example.com")
-
-    db.session.add(item)
-    db.session.commit()
+from usedgoodreads.base import app, db, q
+from usedgoodreads.models.book import Book
+from usedgoodreads.models.usedbook import UsedBook
+from usedgoodreads.models.ticket import Ticket
+from usedgoodreads.worker import resolve_isbn, resolve_used_books
 
 
 # https://www.usedgoodreads.com/book/show/36236132-growing-a-revolution
@@ -41,10 +16,10 @@ def index(key):
         books = UsedBook.get(isbn=cache.isbn)
 
         if books:
-            results = [ { "title": v.title, "description": v.description } for v in books ]
+            results = [{"title": v.title, "description": v.description} for v in books]
 
             return render_template("index.html", isbn=cache.isbn, title=cache.title,
-                    results=results)
+                                   results=results)
 
     ticket = Ticket(key)
 
@@ -55,10 +30,10 @@ def index(key):
         return render_template("index.html")
 
     q.enqueue(resolve_isbn, key, job_timeout=60 * 1,
-            ttl=60 * 60, job_id=ticket.isbn_jid)
+              ttl=60 * 60, job_id=ticket.isbn_jid)
 
     q.enqueue(resolve_used_books, key, job_timeout=60 * 1,
-            ttl=60 * 60, job_id=ticket.used_books_jid, depends_on=ticket.isbn_jid)
+              ttl=60 * 60, job_id=ticket.used_books_jid, depends_on=ticket.isbn_jid)
 
     return render_template("index.html")
 
