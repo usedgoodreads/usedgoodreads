@@ -1,10 +1,28 @@
+from .base import app, db, q
 from flask import render_template
+import time
 
-from usedgoodreads.base import app, db, q
-from usedgoodreads.models.book import Book
-from usedgoodreads.models.usedbook import UsedBook
-from usedgoodreads.models.ticket import Ticket
-from usedgoodreads.worker import resolve_isbn, resolve_used_books
+from .models.book import Book
+from .models.usedbook import UsedBook
+from .models.ticket import Ticket
+
+from .jobs import resolve_goodreads_key
+
+
+def resolve_used_books(key):
+    time.sleep(3)
+
+    cache = Book.get(key=key)
+
+    if not cache:
+        return
+
+    item = UsedBook(isbn=cache.isbn, title="Harry Potter 2",
+                    description="Book in good shape", price=5,
+                    link="http://example.com")
+
+    db.session.add(item)
+    db.session.commit()
 
 
 # https://www.usedgoodreads.com/book/show/36236132-growing-a-revolution
@@ -29,8 +47,8 @@ def index(key):
     if q.fetch_job(ticket.used_books_jid):
         return render_template("index.html")
 
-    q.enqueue(resolve_isbn, key, job_timeout=60 * 1,
-              ttl=60 * 60, job_id=ticket.isbn_jid)
+    q.enqueue(resolve_goodreads_key, ticket, job_timeout=60 * 1,
+            ttl=60 * 60, job_id=ticket.isbn_jid)
 
     q.enqueue(resolve_used_books, key, job_timeout=60 * 1,
               ttl=60 * 60, job_id=ticket.used_books_jid, depends_on=ticket.isbn_jid)
