@@ -32,9 +32,9 @@ We require [Docker](https://docs.docker.com/engine/) and [Docker Compose](https:
 
 Workflow
 1. Configure the environment using `*.env` files in the `env` directory; see the `env/*.env.example` files
-2. Get a shell in the container you are developing for, e.g. the backend
-3. Use your host editor to make changes to backend source code
-4. Run tests, linters, the app, etc. in the backend container shell
+2. Get a shell in the container you are developing for, e.g. the app
+3. Use your host editor to make changes to app source code
+4. Run tests, linters, the app, etc. in the app container shell
 
 This makes sure our development is self-contained and reproducible.
 At the same time it makes away with having to build new images for source code changes.
@@ -63,9 +63,9 @@ Shutdown infrastructure
 
     docker-compose down
 
-Get a shell in a backend container for development, dependencies are up, and ports exposed on the host
+Get a shell in a app container for development, dependencies are up, and ports exposed on the host
 
-    docker-compose run --entrypoint bash --service-ports backend
+    docker-compose run --entrypoint bash --service-ports app
 
 The idea is to build the images once.
 We then mount the app directory into the corresponding running container.
