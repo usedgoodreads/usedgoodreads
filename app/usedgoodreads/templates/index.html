@@ -10,6 +10,8 @@
   <body>
   {% if isbn and title %}
     <h2>🔖 {{ title }} - {{ isbn }}</h2>
+  {% elif status %}
+    <h1> {{status}} </h1>
   {% else %}
     <h1>📥 Pending..</h1>
   {% endif %}
@@ -18,7 +20,7 @@
     <li>📘 {{result.title}} </li>
     <ul>
       <li> {{result.description}} </li>
-      <li> {{result.link}} </li>
+      <li> <a href="{{result.link}}">{{result.link}}</a></li>
       <li> {{result.price}} Euro </li>
     </ul>
   {% endfor %}

@@ -18,7 +18,8 @@ def index(key):
         books = UsedBook.get(isbn=cache.isbn)
 
         if books:
-            results = [{"title": v.title, "description": v.description} for v in books]
+            results = [{"title": v.title, "description": v.description,
+                        "price": v.price, "link": v.link} for v in books]
 
             return render_template("index.html", isbn=cache.isbn, title=cache.title,
                                    results=results)
@@ -29,7 +30,7 @@ def index(key):
         return render_template("index.html")
 
     if q.fetch_job(ticket.used_books_jid):
-        return render_template("index.html")
+        return render_template("index.html", status="searching")  # TODO: Should return actual status
 
     q.enqueue(resolve_goodreads_key, ticket, job_timeout=60 * 1,
             ttl=60 * 60, job_id=ticket.isbn_jid)
