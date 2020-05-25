@@ -10,17 +10,17 @@ services:
     init: true
     env_file:
       - ./env/.redis.env
-  backend:
-    image: usedgoodreads/backend
-    build: backend
+  app:
+    image: usedgoodreads/app
+    build: app
     init: true
     command: bash -c "wait-for-it -s -t 60 postgres:5432 && wait-for-it -s -t 60 redis:6379 -- usedgoodreads"
     ports:
       - "5000:5000"
     env_file:
-      - ./env/.backend.env
+      - ./env/.app.env
     volumes:
-      - ./backend:/home/python/app
+      - ./app:/home/python/app
     depends_on:
       - postgres
       - redis
@@ -29,28 +29,15 @@ services:
     image: selenium/standalone-firefox:3.141.59-20200515
     ipc: host
   worker:
-    image: usedgoodreads/backend
-    build: backend
+    image: usedgoodreads/app
+    build: app
     init: true
     command: bash -c "wait-for-it -s -t 60 postgres:5432 && wait-for-it -s -t 60 redis:6379 -- rq worker --url redis://redis:6379"
     env_file:
-      - ./env/.backend.env
+      - ./env/.app.env
     volumes:
-      - ./backend:/home/python/app
+      - ./app:/home/python/app
     depends_on:
       - postgres
       - redis
       - firefox
-  frontend:
-    image: usedgoodreads/frontend
-    build: frontend
-    init: true
-    command: bash -c "wait-for-it -s -t 60 backend:5000 -- npm start"
-    ports:
-      - "3000:3000"
-    env_file:
-      - ./env/.frontend.env
-    volumes:
-      - ./frontend:/home/node/app
-    depends_on:
-      - backend

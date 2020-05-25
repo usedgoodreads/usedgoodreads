@@ -56,7 +56,7 @@ Get a shell in a backend container for development, dependencies are up, and por
     docker-compose run --entrypoint bash --service-ports backend
 
 The idea is to build the images once.
-We then mount the backend and frontend directories into their corresponding running containers.
+We then mount the app directory into the corresponding running container.
 This allows us to modify the sources on the host and immediately see the changes in the self-contained and reproducible build environment.
 
 
