@@ -1,0 +1,13 @@
+version: "3.7"
+
+services:
+
+  app:
+    build: ./app
+    volumes:
+      - ./app:/home/python/app
+
+  worker:
+    build: ./app
+    volumes:
+      - ./app:/home/python/app

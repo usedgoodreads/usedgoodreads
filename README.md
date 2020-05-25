@@ -72,6 +72,24 @@ We then mount the app directory into the corresponding running container.
 This allows us to modify the sources on the host and immediately see the changes in the self-contained and reproducible build environment.
 
 
+## Deployment
+
+On the remote host install
+- [Docker](https://docs.docker.com/engine/) and make sure to follow the post-installation steps
+- [Docker Compose](https://docs.docker.com/compose/)
+
+On the remote host, increase the number of ssh sessions in `/etc/ssh/sshd_config`
+
+    MaxSessions 256
+
+Then from this directory deploy to the remote host with production overrides
+
+    DOCKER_HOST="ssh://user@host" docker-compose \
+      -f docker-compose.yaml \
+      -f docker-compose.prod.yaml \
+      up -d
+
+
 ## License
 
 Copyright © 2020 usedgoodreads

@@ -1,42 +1,42 @@
 version: "3.7"
+
 services:
+
   postgres:
     image: postgres:12
     init: true
     env_file:
       - ./env/.postgres.env
+
   redis:
     image: redis:5
     init: true
     env_file:
       - ./env/.redis.env
+
   app:
     image: usedgoodreads/app
-    build: app
     init: true
     command: bash -c "wait-for-it -s -t 60 postgres:5432 && wait-for-it -s -t 60 redis:6379 -- usedgoodreads"
     ports:
       - "5000:5000"
     env_file:
       - ./env/.app.env
-    volumes:
-      - ./app:/home/python/app
     depends_on:
       - postgres
       - redis
       - worker
+
   firefox:
     image: selenium/standalone-firefox:3.141.59-20200515
     ipc: host
+
   worker:
     image: usedgoodreads/app
-    build: app
     init: true
     command: bash -c "wait-for-it -s -t 60 postgres:5432 && wait-for-it -s -t 60 redis:6379 -- rq worker --url redis://redis:6379"
     env_file:
       - ./env/.app.env
-    volumes:
-      - ./app:/home/python/app
     depends_on:
       - postgres
       - redis
