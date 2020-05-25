@@ -1,12 +1,12 @@
 from .base import app, db, q
 from flask import render_template
 
-from .models.book import Book
-from .models.usedbook import UsedBook
-from .models.ticket import Ticket
+from usedgoodreads.models.book import Book
+from usedgoodreads.models.usedbook import UsedBook
+from usedgoodreads.models.ticket import Ticket
 
-from .jobs import resolve_goodreads_key
-from .jobs import resolve_used_books
+from usedgoodreads.jobs import resolve_goodreads_key
+from usedgoodreads.jobs import resolve_used_books
 
 
 # https://www.usedgoodreads.com/book/show/36236132-growing-a-revolution

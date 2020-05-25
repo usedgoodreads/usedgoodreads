@@ -2,10 +2,10 @@ import os
 import urllib3
 import time
 
-from .models.book import Book
-from .models.usedbook import UsedBook
-from .models.ticket import Ticket
-from .base import db
+from usedgoodreads.models.book import Book
+from usedgoodreads.models.usedbook import UsedBook
+from usedgoodreads.models.ticket import Ticket
+from usedgoodreads.base import db
 
 from bs4 import BeautifulSoup
 
@@ -110,6 +110,7 @@ def single_searchresult_to_bookoffer(item, isbn):
     # date = item.find_element_by_class_name("aditem-addon").text
     price = details.find_element_by_tag_name("strong")
     price_int = price.text.split()
+    price = 10**9  # TODO: :)
 
     # TODO fix price parsing
     for i in price_int:
