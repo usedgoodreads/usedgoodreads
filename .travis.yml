@@ -44,5 +44,5 @@ after_success:
       DOCKER_HOST="$APP_DEPLOY_HOST" docker-compose \
         -f docker-compose.yaml \
         -f docker-compose.prod.yaml \
-        up -d
+        up --build --detach
     fi
