@@ -92,6 +92,49 @@ Then from this directory deploy to the remote host with production overrides
       up --build --detach
 
 
+## Architecture
+
+We run a Flask based API which takes the Goodreads-like book route
+
+    /book/show/36236132-growing-a-revolution
+
+and uses the key `36236132-growing-a-revolution` as a key for two lookups
+- Lookup against a Postgres database to see if we have the book's title and isbn. If not, we enqueue an async job (with rq, through Redis) to resolve the book's title and isbn for the key.
+- Lookup against a Postgres database to see if we have up to date used book result. If not, we enqueue an async job (with rq, through Redis) to resolve used books for a book's title and isbn for the key.
+
+These jobs run asynchronously and write their results into a Postgres database.
+Once we have up to date used book results, the Flaks API renders a Jinja2 template and returns the generated HTML to the user.
+
+```
++-api-------------------------------------------------------------------+
+|                                                                       |
+| https://www.usedgoodreads.com/book/show/36236132-growing-a-revolution |
+|                                                                       |
++----------------------------+------------------------------------------+
+                             |
+                             |
+                             |
++-key------------------------v---+                                 +-postgres---------------------+
+|                                +--------------------------------->                              |
+|  36236132-growing-a-revolution |                                 | Up to date used book results |
+|                                <---------------------------------+                              |
++------------------------+---+---+                                 +-------------------------^----+
++-isbn------------+      |   |                                     +-fetch-----+             |
+|                 <------+   +------------------------------------->           |             |
+|  9780393608328  |                                                | Goodreads |             |
+|                 <------------------------------------------------+           |             |
++-------------+---+                                                +-----------+             |
++-rq-------+  |                                                                              |
+|          |  |                                                                              |
+|  Worker  <--+                                                                              |
+|          |                                                                                 |
++-------+--+                                                                                 |
+        |                                                                                    |
+        |                                                                                    |
+        +------------------------------------------------------------------------------------+
+```
+
+
 ## License
 
 Copyright © 2020 usedgoodreads
