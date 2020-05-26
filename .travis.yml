@@ -1,0 +1,44 @@
+language: generic
+sudo: required
+dist: bionic
+
+services:
+  - docker
+
+cache:
+  timeout: 600
+  directories:
+  - $HOME/.docker/images
+
+matrix:
+  fast_finish: true
+  include:
+    - os: linux
+
+before_install:
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  - sudo apt-get update && sudo apt-get -y install docker-ce
+
+  - sudo curl -L "https://github.com/docker/compose/releases/download/1.25.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  - sudo chmod +x /usr/local/bin/docker-compose
+
+  - docker load -i $HOME/.docker/images/images.tar || true
+
+  - cp env/.app.env.example env/.app.env
+  - cp env/.postgres.env.example env/.postgres.env
+
+  - docker-compose build
+
+before_cache:
+  - docker save -o $HOME/.docker/images/images.tar $(docker images -a -q)
+
+after_success:
+  - |
+    if [[ $TRAVIS_BRANCH == "master" ]]; then
+      echo "Deploying master to remote host"
+    fi
+  - |
+    if [[ ! -z $TRAVIS_TAG ]]; then
+      echo "Deploying tag to remote host"
+    fi

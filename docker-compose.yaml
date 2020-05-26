@@ -11,8 +11,6 @@ services:
   redis:
     image: redis:5
     init: true
-    env_file:
-      - ./env/.redis.env
 
   app:
     image: usedgoodreads/app

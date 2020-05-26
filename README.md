@@ -1,4 +1,6 @@
-<h1 align='center'>Used Good Reads</h1>
+<h1 align="center">Used Good Reads</h1>
+
+<p align="center"><a href="https://travis-ci.org/usedgoodreads/usedgoodreads"><img src="https://travis-ci.org/usedgoodreads/usedgoodreads.svg?branch=master" /></a></p>
 
 <p align=center>
   <img src="assets/usedgoodreads.png" />
