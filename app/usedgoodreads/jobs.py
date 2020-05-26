@@ -77,8 +77,11 @@ def get_used_books_from_kleinanzeigen(book):
 
     time.sleep(5)
     results = driver.find_elements_by_id("srchrslt-adtable")
-    assert len(results) == 1, f"Length [{len(results)}]: {results}"
-    result = results[0]  # TODO fix if search result has 0 length
+
+    if not results:
+        return []
+
+    result = results[0]
     assert result.tag_name == "ul"
     return [single_searchresult_to_bookoffer(item, book.isbn)
             for item in result.find_elements_by_class_name("lazyload-item")]
