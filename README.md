@@ -91,6 +91,15 @@ Then from this directory deploy to the remote host with production overrides
       -f docker-compose.prod.yaml \
       up -d
 
+Deploying updates to the app service while keeping other services untouched and running
+
+    docker-compose build app
+
+    DOCKER_HOST="ssh://user@host" docker-compose \
+      -f docker-compose.yaml \
+      -f docker-compose.prod.yaml \
+      up -d --no-deps app
+
 
 ## License
 
