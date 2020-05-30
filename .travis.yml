@@ -41,10 +41,29 @@ after_success:
 
       ssh-keyscan -t ed25519 "${APP_DEPLOY_HOST}" >> ~/.ssh/known_hosts
 
-      docker image save usedgoodreads/app | ssh "${APP_DEPLOY_USER}@${APP_DEPLOY_HOST}" "docker image load"
+      docker tag usedgoodreads/app usedgoodreads/app:production
+      docker image save usedgoodreads/app:production | ssh "${APP_DEPLOY_USER}@${APP_DEPLOY_HOST}" "docker image load"
 
       DOCKER_HOST="ssh://${APP_DEPLOY_USER}@${APP_DEPLOY_HOST}" docker-compose \
+        -p production \
         -f docker-compose.yaml \
-        -f docker-compose.prod.yaml \
+        -f docker-compose.production.yaml \
+        up --detach
+    fi
+
+  - |
+    if [[ $TRAVIS_BRANCH == "develop" ]]; then
+      echo $APP_DEPLOY_KEY | base64 --decode - > ~/.ssh/id_ed25519
+      chmod 600 ~/.ssh/id_ed25519
+
+      ssh-keyscan -t ed25519 "${APP_DEPLOY_HOST}" >> ~/.ssh/known_hosts
+
+      docker tag usedgoodreads/app usedgoodreads/app:staging
+      docker image save usedgoodreads/app:staging | ssh "${APP_DEPLOY_USER}@${APP_DEPLOY_HOST}" "docker image load"
+
+      DOCKER_HOST="ssh://${APP_DEPLOY_USER}@${APP_DEPLOY_HOST}" docker-compose \
+        -p staging \
+        -f docker-compose.yaml \
+        -f docker-compose.staging.yaml \
         up --detach
     fi

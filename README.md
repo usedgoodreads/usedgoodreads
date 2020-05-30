@@ -84,12 +84,20 @@ On the remote host, increase the number of ssh sessions in `/etc/ssh/sshd_config
 
     MaxSessions 256
 
-Then from this directory deploy to the remote host with production overrides
+Then either use a container registry or push your image directly to the remote host
+
+    docker image tag usedgoodreads/app usedgoodreads/app:staging
+    docker image save usedgoodreads/app:staging | ssh user@host "docker image load"
+
+Then spawn up the infrastructure on the remote host with staging overrides and a staging project name
 
     DOCKER_HOST="ssh://user@host" docker-compose \
+      -p staging \
       -f docker-compose.yaml \
-      -f docker-compose.prod.yaml \
-      up --build --detach
+      -f docker-compose.staging.yaml \
+      up --detach
+
+Note: we are using Travis CI/CD to automatically deploy; see the [`.travis.yml`](./.travis.yml).
 
 
 ## Architecture

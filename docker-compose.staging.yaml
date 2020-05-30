@@ -1,0 +1,11 @@
+version: "3.7"
+
+services:
+
+  app:
+    image: usedgoodreads/app:staging
+    ports:
+      - "8080:5000"
+
+  worker:
+    image: usedgoodreads/app:staging
