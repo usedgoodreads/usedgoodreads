@@ -39,10 +39,12 @@ after_success:
       echo $APP_DEPLOY_KEY | base64 --decode - > ~/.ssh/id_ed25519
       chmod 600 ~/.ssh/id_ed25519
 
-      ssh-keyscan -t ed25519 usedgoodreads.com >> ~/.ssh/known_hosts
+      ssh-keyscan -t ed25519 "${APP_DEPLOY_HOST}" >> ~/.ssh/known_hosts
 
-      DOCKER_HOST="$APP_DEPLOY_HOST" docker-compose \
+      docker image save usedgoodreads/app | ssh "${APP_DEPLOY_USER}@${APP_DEPLOY_HOST}" "docker image load"
+
+      DOCKER_HOST="ssh://${APP_DEPLOY_USER}@${APP_DEPLOY_HOST}" docker-compose \
         -f docker-compose.yaml \
         -f docker-compose.prod.yaml \
-        up --build --detach
+        up --detach
     fi
