@@ -27,6 +27,7 @@ services:
 
   firefox:
     image: selenium/standalone-firefox:3.141.59-20200515
+    init: true
     ipc: host
 
   worker:
