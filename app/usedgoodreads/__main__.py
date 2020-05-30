@@ -21,6 +21,8 @@ def index(key):
             results = [{"title": v.title, "description": v.description,
                         "price": v.price, "link": v.link} for v in books]
 
+            results.sort(key=lambda each: each["price"])
+
             return render_template("index.html", isbn=cache.isbn, title=cache.title,
                                    results=results)
 
