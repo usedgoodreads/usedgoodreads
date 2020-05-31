@@ -22,4 +22,6 @@ RUN poetry install --no-interaction --no-root --ansi
 COPY --chown=python:python . .
 RUN poetry install --no-interaction --ansi
 
+EXPOSE 5000
+
 CMD ["usedgoodreads"]

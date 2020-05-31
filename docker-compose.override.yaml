@@ -3,8 +3,6 @@ version: "3.7"
 services:
 
   app:
-    ports:
-      - "5000:5000"
     build: ./app
     volumes:
       - ./app:/home/python/app

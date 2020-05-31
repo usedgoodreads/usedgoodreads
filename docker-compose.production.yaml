@@ -4,8 +4,10 @@ services:
 
   app:
     image: usedgoodreads/app:production
-    ports:
-      - "80:5000"
 
   worker:
     image: usedgoodreads/app:production
+
+  nginx:
+    volumes:
+      - /etc/letsencrypt/live/usedgoodreads.com/:/certs
