@@ -4,8 +4,10 @@ services:
 
   app:
     image: usedgoodreads/app:staging
-    ports:
-      - "8080:5000"
 
   worker:
     image: usedgoodreads/app:staging
+
+  nginx:
+    volumes:
+      - ./nginx/certs:/certs
