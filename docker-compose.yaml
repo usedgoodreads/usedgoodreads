@@ -35,8 +35,9 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    command: /bin/bash -c "envsubst '$$NGINX_HOST' < /etc/nginx/conf.d/conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/conf.template
     depends_on:
       - app
     # #TODO Without this dependency the configuration of nginx can not use `app`
