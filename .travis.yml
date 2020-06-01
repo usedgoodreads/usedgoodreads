@@ -27,6 +27,7 @@ before_install:
 
   - cp env/.app.env.example env/.app.env
   - cp env/.postgres.env.example env/.postgres.env
+  - cp env/.nginx.env.example env/.nginx.env
 
   - docker-compose build
 
