@@ -11,3 +11,7 @@ services:
     build: ./app
     volumes:
       - ./app:/home/python/app
+
+  nginx:
+    volumes:
+      - ./nginx/certs:/certs
