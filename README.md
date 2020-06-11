@@ -40,7 +40,7 @@ Workflow
 
 This makes sure our development is self-contained and reproducible.
 At the same time it makes away with having to build new images for source code changes.
-See [infrastructure](##infrastructure) below for details on e.g. how to get a shell in a container.
+See [infrastructure](#infrastructure) below for details on e.g. how to get a shell in a container.
 
 ## SSL Certificates
 
