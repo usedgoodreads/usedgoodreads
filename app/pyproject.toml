@@ -12,6 +12,7 @@ psycopg2 = "^2.8.5"
 selenium = "^3.141.0"
 flask = "^1.1.2"
 beautifulsoup4 = "^4.9.1"
+gunicorn = {extras = ["gevent"], version = "^20.0.4"}
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.8.1"
