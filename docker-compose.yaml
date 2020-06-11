@@ -15,7 +15,7 @@ services:
   app:
     image: usedgoodreads/app
     init: true
-    command: bash -c "wait-for-it -s -t 60 postgres:5432 && wait-for-it -s -t 60 redis:6379 -- usedgoodreads"
+    command: bash -c "wait-for-it -s -t 60 postgres:5432 && wait-for-it -s -t 60 redis:6379 -- gunicorn 'usedgoodreads.__main__:main()'"
     env_file:
       - ./env/.app.env
     depends_on:
