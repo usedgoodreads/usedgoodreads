@@ -10,4 +10,4 @@ services:
 
   nginx:
     volumes:
-      - ./nginx/certs:/certs
+      - /etc/letsencrypt/live/usedgoodreads.com/:/certs
