@@ -11,3 +11,6 @@ services:
   nginx:
     volumes:
       - /etc/letsencrypt/live/usedgoodreads.com/:/certs
+    ports:
+      - 80:80
+      - 443:443
