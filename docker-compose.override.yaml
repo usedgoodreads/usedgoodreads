@@ -15,3 +15,6 @@ services:
   nginx:
     volumes:
       - ./nginx/certs:/certs
+    ports:
+      - "80:80"
+      - "443:443"
