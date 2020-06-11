@@ -48,8 +48,4 @@ def main():
     db.session.commit()
 
     # TODO: look into proper runners, e.g. guincorn
-    app.run(host="0.0.0.0", port=5000)
-
-
-if __name__ == "__main__":
-    main()
+    return app

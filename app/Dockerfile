@@ -24,4 +24,4 @@ RUN poetry install --no-interaction --ansi
 
 EXPOSE 5000
 
-CMD ["usedgoodreads"]
+CMD ["gunicorn", "'usedgoodreads.__main__:main()'"]
