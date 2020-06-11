@@ -59,7 +59,7 @@ after_success:
       ssh-keyscan -t ed25519 "${APP_DEPLOY_HOST}" >> ~/.ssh/known_hosts
 
       docker tag usedgoodreads/app usedgoodreads/app:staging
-      docker image save usedgoodreads/app:staging | ssh "${APP_DEPLOY_USER}@${APP_DEPLOY_HOST}" "docker image load"
+      docker image save usedgoodreads/app:staging | ssh "${APP_DEPLOY_USER}@${APP_DEPLOY_HOST}" "docker system prune -f -a ; docker image load"
 
       DOCKER_HOST="ssh://${APP_DEPLOY_USER}@${APP_DEPLOY_HOST}" docker-compose \
         -p staging \
