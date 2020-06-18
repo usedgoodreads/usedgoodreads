@@ -4,12 +4,14 @@
     <meta charset='utf-8' />
     <title>🔖 Used Good Reads</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <link rel='stylesheet' href='{{ url_for("static", filename="basic.css") }}'>
+    <link rel='stylesheet' href='{{ url_for("static", filename="mobile.css") }}'>
     <style>
     </style>
   </head>
   <body>
   {% if isbn and title %}
-    <h2>🔖 {{ title }} - {{ isbn }}</h2>
+    <h1>🔖 {{ title }} - {{ isbn }}</h1>
   {% elif status %}
     <h1> {{ status }} </h1>
   {% else %}
