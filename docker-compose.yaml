@@ -32,7 +32,7 @@ services:
     image: nginx:1.18.0
     env_file:
       - env/.nginx.env
-    command: /bin/bash -c "envsubst '$$NGINX_HOST' < /etc/nginx/conf.d/conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+    command: /bin/bash -c "envsubst '$$NGINX_PORT $$NGINX_SSL_PORT $$NGINX_HOST' < /etc/nginx/conf.d/conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
     volumes:
       - ./nginx/server.conf:/etc/nginx/conf.d/conf.template
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
