@@ -9,8 +9,10 @@ services:
     image: usedgoodreads/app:production
 
   nginx:
+    env_file:
+      - ./env/.nginx.production.env
     volumes:
-      - /etc/letsencrypt/live/usedgoodreads.com/:/certs
+      - ./nginx/certs/:/certs
     ports:
       - "80:80"
       - "443:443"
