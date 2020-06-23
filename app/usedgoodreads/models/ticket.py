@@ -18,3 +18,6 @@ class Ticket:
         key = f"resolve_used_books:{self.goodreads_key}"
         h.update(key.encode("utf-8"))
         return h.hexdigest()
+
+    def __repr__(self):
+        return f"Ticket(goodreads_key:{self.goodreads_key})"

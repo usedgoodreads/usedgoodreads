@@ -6,16 +6,18 @@
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <link rel='stylesheet' href='{{ url_for("static", filename="basic.css") }}'>
     <link rel='stylesheet' href='{{ url_for("static", filename="mobile.css") }}'>
+    {% if refresh %}
+    <meta http-equiv="refresh" content="3">
+    {% endif %}
     <style>
     </style>
   </head>
   <body>
   {% if isbn and title %}
     <h1>🔖 {{ title }} - {{ isbn }}</h1>
-  {% elif status %}
-    <h1> {{ status }} </h1>
-  {% else %}
-    <h1>📥 Pending..</h1>
+  {% endif %}
+  {% if status %}
+    <h2>🔍 {{ status }} </h2>
   {% endif %}
   <ul>
   {% for result in results %}
