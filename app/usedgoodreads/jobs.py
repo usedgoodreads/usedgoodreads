@@ -42,9 +42,9 @@ def resolve_used_books(key):
     book = Book.get(key)
     ebay_books = get_used_books_from_kleinanzeigen(book)
 
-    # TODO: There seems to be a problem with writing price and link into the db
     for b in ebay_books:
         db.session.add(b)
+
     db.session.commit()
 
 
