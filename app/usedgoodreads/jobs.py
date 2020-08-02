@@ -112,13 +112,12 @@ def single_searchresult_to_bookoffer(item, isbn):
     details = item.find_element_by_class_name("aditem-details")
     # date = item.find_element_by_class_name("aditem-addon").text
     price = details.find_element_by_tag_name("strong")
-    price_int = price.text.split()
-    price = 10**9  # TODO: :)
+    price_float = price.text.replace(".", "").split()
+    price = float("nan")
 
-    # TODO fix price parsing
-    for i in price_int:
+    for i in price_float:
         try:
-            price = int(i)
+            price = float(i)
         except ValueError:
             continue
         else:

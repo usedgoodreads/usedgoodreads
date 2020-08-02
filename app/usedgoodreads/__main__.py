@@ -1,4 +1,6 @@
 import sys
+import math
+
 from .base import app, db, q
 from flask import render_template, abort
 
@@ -27,17 +29,19 @@ def index(key):
         books = UsedBook.get(isbn=cache.isbn)
         isbn = cache.isbn
         title = cache.title
+
         if books:
             # Used books are in database
             results = [{"title": v.title, "description": v.description,
-                        "price": v.price, "link": v.link} for v in books]
-            results.sort(key=lambda each: each["price"])
+                        "price": v.price if not math.isnan(v.price) else None, "link": v.link} for v in books]
+            results.sort(key=lambda each: each["price"] if each["price"] != None else float("inf"))
             refresh = False
         else:
             # Used books need to be fetched
             job = q.fetch_job(ticket.used_books_jid)
             refresh = False
             status = "Used books: pending"
+
             if job and job.get_status() == "finished":
                 # job already fetched w/o results
                 status = "Used books: No results"
@@ -57,6 +61,7 @@ def index(key):
         job = q.fetch_job(ticket.isbn_jid)
         status = "URL: pending"
         refresh = False
+
         if job:
             # Resolve task is already in q
             status = f"URL: {job.get_status()}"
@@ -67,6 +72,7 @@ def index(key):
                       ttl=60 * 60, job_id=ticket.isbn_jid)
             status = "URL: enqueued"
             refresh = True
+
     return render_template("index.html", isbn=isbn, title=title, results=results, status=status, refresh=refresh)
 
 

@@ -8,7 +8,7 @@ class UsedBook(db.Model):
     isbn = db.Column(db.String(), nullable=False, index=True)
     title = db.Column(db.String(), nullable=False)
     description = db.Column(db.String(), nullable=False)
-    price = db.Column(db.Integer, nullable=False)
+    price = db.Column(db.Float, nullable=False)
     link = db.Column(db.String(), nullable=False)
 
     at = db.Column(db.DateTime(), default=datetime.utcnow)

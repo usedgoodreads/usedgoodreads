@@ -25,7 +25,9 @@
     <ul>
       <li> {{ result.description }} </li>
       <li> <a href="{{ result.link }}">{{result.link}}</a></li>
+      {% if result.price %}
       <li> {{ result.price }} Euro </li>
+      {% endif %}
     </ul>
   {% endfor %}
   </ul>
